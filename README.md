@@ -51,3 +51,20 @@ SQS provides resiliency, and we can have multiple workers pulling the keys from 
 SQS handles deduplication, retries for us and the keys read are in flight mode so we can be sure that the same keys wont be picked up by 2 different workers.
 
 Also this can be scaled as demand grows, more workers/machines for handling reencryption of multiple keys.
+
+## Note on Resiliency
+
+We can have an event driven approach for the whole architecture.
+
+One can have a request and response queue for each and every microservice.
+
+Whenever a microservice needs to interact with another, it can simply send the message to the request queue.
+And the response will be sent to the response queue of the same microservice.
+
+This design guarantees resiliency, idempotency and atleasy once delivery (all inherent features of the queue).
+
+## Other services
+
+We can have an `auth service` after the gateway, this way the gateway will just handle some of the features like retries etc and we can decouple the auth service into a separate auth service (kind of a middleware).
+
+
